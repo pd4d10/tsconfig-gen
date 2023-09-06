@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "",
   "type": "module",
+  "bin": "dist/index.js",
   "main": "dist/index.js",
   "scripts": {
     "dev": "tsc --watch",
