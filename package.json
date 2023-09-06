@@ -1,0 +1,21 @@
+{
+  "name": "tsconfig-gen",
+  "version": "0.0.1",
+  "description": "",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsc --watch",
+    "build": "tsc"
+  },
+  "repository": "pd4d10/tsconfig-gen",
+  "keywords": [],
+  "author": "Rongjian Zhang",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "cac": "^6.7.14"
+  }
+}
