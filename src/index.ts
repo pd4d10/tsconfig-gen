@@ -52,14 +52,15 @@ cli.command("").action(async () => {
 
   // sub projects
   for (const p of Object.values(map)) {
+    const references = p.deps
+      .filter((dep) => map[dep])
+      .map((dep) => {
+        return { path: path.relative(p.dir, map[dep].dir) };
+      });
     await modifyTsconfig(p.dir, (json) => {
       return {
         ...json,
-        references: p.deps
-          .filter((dep) => map[dep])
-          .map((dep) => {
-            return { path: path.relative(p.dir, map[dep].dir) };
-          }),
+        references: references.length ? references : undefined,
       };
     });
   }
