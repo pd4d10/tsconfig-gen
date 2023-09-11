@@ -9,6 +9,9 @@
     "dev": "tsc --watch",
     "build": "tsc"
   },
+  "files": [
+    "dist"
+  ],
   "repository": "pd4d10/tsconfig-gen",
   "keywords": [],
   "author": "Rongjian Zhang",
