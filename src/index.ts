@@ -19,8 +19,12 @@ cli.command("").action(async () => {
   });
 
   let dirs = files.map((p) => path.dirname(p));
-  // exclude nested paths
-  dirs = dirs.filter((p) => !dirs.some((p0) => p !== p0 && p.includes(p0)));
+
+  dirs = dirs
+    // exclude nested paths
+    .filter((p) => !dirs.some((p0) => p !== p0 && p.includes(p0)))
+    // exclude non-ts projects
+    .filter((p) => fs.existsSync(path.resolve(p, "tsconfig.json")));
 
   const map: Record<string, { dir: string; packageJson: any; deps: string[] }> =
     {};
