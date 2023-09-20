@@ -56,11 +56,10 @@ cli.command("").action(async () => {
 
   // sub projects
   for (const p of Object.values(map)) {
-    const references = p.deps
-      .filter((dep) => map[dep])
-      .map((dep) => {
-        return { path: path.relative(p.dir, map[dep].dir) };
-      });
+    const references = p.deps.flatMap((dep) => {
+      const v = map[dep];
+      return v ? [{ path: path.relative(p.dir, v.dir) }] : [];
+    });
     await modifyTsconfig(p.dir, (json) => {
       return {
         ...json,
