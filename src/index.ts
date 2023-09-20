@@ -1,9 +1,6 @@
-import { cac } from "cac";
 import { glob } from "glob";
 import fs from "node:fs";
 import path from "node:path";
-
-const cli = cac();
 
 const modifyTsconfig = async <T = any>(dir: string, modify: (json: T) => T) => {
   const filePath = path.resolve(dir, "tsconfig.json");
@@ -13,7 +10,7 @@ const modifyTsconfig = async <T = any>(dir: string, modify: (json: T) => T) => {
   await fs.promises.writeFile(filePath, JSON.stringify(json));
 };
 
-cli.command("").action(async () => {
+export async function tsconfigGen() {
   const files = await glob("**/*/package.json", {
     ignore: "**/node_modules/**",
   });
@@ -69,7 +66,4 @@ cli.command("").action(async () => {
       };
     });
   }
-});
-
-cli.help();
-cli.parse();
+}
