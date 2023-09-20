@@ -58,7 +58,9 @@ cli.command("").action(async () => {
   for (const p of Object.values(map)) {
     const references = p.deps.flatMap((dep) => {
       const v = map[dep];
-      return v ? [{ path: path.relative(p.dir, v.dir) }] : [];
+      return v && p.packageJson.name !== v.packageJson.name // exclude self to avoid circular
+        ? [{ path: path.relative(p.dir, v.dir) }]
+        : [];
     });
     await modifyTsconfig(p.dir, (json) => {
       return {
