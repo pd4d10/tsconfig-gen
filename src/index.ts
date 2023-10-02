@@ -18,8 +18,6 @@ export async function tsconfigGen() {
   let dirs = files.map((p) => path.dirname(p));
 
   dirs = dirs
-    // exclude nested paths
-    .filter((p) => !dirs.some((p0) => p !== p0 && p.includes(p0)))
     // exclude non-ts projects
     .filter((p) => fs.existsSync(path.resolve(p, "tsconfig.json")));
 
@@ -40,6 +38,8 @@ export async function tsconfigGen() {
       }),
     };
   }
+
+  console.log(map);
 
   // root
   await modifyTsconfig(process.cwd(), (json) => {
