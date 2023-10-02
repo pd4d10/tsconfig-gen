@@ -39,7 +39,7 @@ export async function tsconfigGen() {
     };
   }
 
-  console.log(map);
+  // console.log(map);
 
   // root
   await modifyTsconfig(process.cwd(), (json) => {
