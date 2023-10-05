@@ -1,4 +1,4 @@
-import { glob } from "glob";
+import fg from "fast-glob";
 import fs from "node:fs";
 import path from "node:path";
 import jsonc, { CommentJSONValue } from "comment-json";
@@ -15,8 +15,8 @@ const modifyTsconfig = async (
 };
 
 export async function tsconfigGen() {
-  const files = await glob("**/*/package.json", {
-    ignore: "**/node_modules/**",
+  const files = await fg.glob("**/*/package.json", {
+    ignore: ["**/node_modules/**"],
   });
 
   let dirs = files.map((p) => path.dirname(p));
