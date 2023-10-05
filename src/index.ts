@@ -1,13 +1,17 @@
 import { glob } from "glob";
 import fs from "node:fs";
 import path from "node:path";
+import jsonc, { CommentJSONValue } from "comment-json";
 
-const modifyTsconfig = async <T = any>(dir: string, modify: (json: T) => T) => {
+const modifyTsconfig = async (
+  dir: string,
+  modify: (json: CommentJSONValue) => void
+) => {
   const filePath = path.resolve(dir, "tsconfig.json");
-  let json = JSON.parse(await fs.promises.readFile(filePath, "utf-8"));
+  const json = jsonc.parse(await fs.promises.readFile(filePath, "utf-8"));
+  modify(json);
 
-  json = modify(json);
-  await fs.promises.writeFile(filePath, JSON.stringify(json));
+  await fs.promises.writeFile(filePath, jsonc.stringify(json, null, 2)); // set space to keep comments
 };
 
 export async function tsconfigGen() {
@@ -43,12 +47,11 @@ export async function tsconfigGen() {
 
   // root
   await modifyTsconfig(process.cwd(), (json) => {
-    return {
-      ...json,
+    jsonc.assign(json, {
       references: Object.values(map).map(({ dir }) => {
         return { path: path.relative(process.cwd(), dir) };
       }),
-    };
+    });
   });
 
   // sub projects
@@ -60,10 +63,9 @@ export async function tsconfigGen() {
         : [];
     });
     await modifyTsconfig(p.dir, (json) => {
-      return {
-        ...json,
-        references: references.length ? references : undefined,
-      };
+      if (references.length) {
+        jsonc.assign(json, { references });
+      }
     });
   }
 }
