@@ -19,11 +19,10 @@ export async function tsconfigGen() {
     ignore: ["**/node_modules/**"],
   });
 
-  let dirs = files.map((p) => path.dirname(p));
-
-  dirs = dirs
-    // exclude non-ts projects
-    .filter((p) => fs.existsSync(path.resolve(p, "tsconfig.json")));
+  const dirs = files
+    .map((p) => path.dirname(p))
+    .sort() // ensure every run result is the same, since fast-glob does not
+    .filter((p) => fs.existsSync(path.resolve(p, "tsconfig.json"))); // exclude non-ts projects
 
   const map: Record<string, { dir: string; packageJson: any; deps: string[] }> =
     {};
